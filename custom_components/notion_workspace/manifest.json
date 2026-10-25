@@ -1,0 +1,13 @@
+{
+  "domain": "notion_workspace",
+  "name": "Notion Workspace",
+  "codeowners": ["@jaclu010"],
+  "config_flow": true,
+  "dependencies": ["application_credentials"],
+  "documentation": "https://github.com/jaclu010/ha-notion",
+  "integration_type": "service",
+  "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/jaclu010/ha-notion/issues",
+  "requirements": [],
+  "version": "0.1.0"
+}

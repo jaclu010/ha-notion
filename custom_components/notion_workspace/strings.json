@@ -1,0 +1,289 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Connect Notion",
+        "description": "How do you want to sign in to Notion?",
+        "menu_options": {
+          "token": "Token (personal access token or internal integration)",
+          "pick_implementation": "Sign in with Notion (OAuth)"
+        }
+      },
+      "token": {
+        "title": "Notion token",
+        "description": "Create a personal access token at notion.so/developers/tokens. It gives Home Assistant the same access as you, so you can pick any page or database in the next steps. An internal integration secret also works, but then only pages shared with that integration are listed.",
+        "data": {
+          "api_token": "Token"
+        },
+        "data_description": {
+          "api_token": "Starts with ntn_ or secret_."
+        }
+      },
+      "reauth_confirm": {
+        "title": "Sign in to Notion again",
+        "description": "The Notion token stopped working (personal access tokens expire). Paste a new token for the same workspace.",
+        "data": {
+          "api_token": "Token"
+        },
+        "data_description": {
+          "api_token": "Starts with ntn_ or secret_."
+        }
+      },
+      "reauth_oauth": {
+        "title": "Sign in to Notion again",
+        "description": "Notion rejected the saved login. Sign in with Notion again."
+      },
+      "pick_implementation": {
+        "title": "Pick authentication method",
+        "data": {
+          "implementation": "Application credentials"
+        }
+      },
+      "databases": {
+        "title": "Databases",
+        "description": "Found {count} databases. Pick the ones to show in Home Assistant. Each becomes a todo list and/or a table sensor. You can add more later.",
+        "data": {
+          "databases": "Databases"
+        },
+        "data_description": {
+          "databases": "Leave empty to skip."
+        }
+      },
+      "pages": {
+        "title": "Pages",
+        "description": "Showing {count} pages (search: {query}). Pick pages to show as markdown and sensors. Type a search term and submit to find more, including database rows.",
+        "data": {
+          "pages": "Pages",
+          "search": "Search"
+        },
+        "data_description": {
+          "pages": "Selections are kept when you search.",
+          "search": "Submit with a search term to list matching pages, or leave empty to continue."
+        }
+      },
+      "database_settings": {
+        "title": "Database settings",
+        "description": "Settings for **{database}**.",
+        "data": {
+          "name": "Name",
+          "view_id": "Notion view",
+          "columns": "Extra columns",
+          "scan_interval": "Update interval"
+        },
+        "data_description": {
+          "view_id": "Use the filter and sort order of a view (for example \"My tasks\"). Leave empty for all rows.",
+          "columns": "Shown under each todo item and in the table sensor.",
+          "scan_interval": "How often Notion is polled."
+        },
+        "sections": {
+          "todo": {
+            "name": "Todo list",
+            "description": "Two-way sync: checking an item in Home Assistant updates Notion.",
+            "data": {
+              "todo_enabled": "Create a todo list",
+              "done_property": "Done property",
+              "done_values": "Values that mean done",
+              "open_value": "Value when un-checking",
+              "due_property": "Due date property",
+              "description_property": "Description property",
+              "assignee_property": "Assign new items to me",
+              "completed_days": "Show done items for (days)"
+            },
+            "data_description": {
+              "todo_enabled": "Needs a status or checkbox property.",
+              "done_property": "Status or checkbox property that marks an item as done.",
+              "done_values": "For a status property: options that count as done.",
+              "open_value": "For a status property: option set when an item is un-checked.",
+              "due_property": "Optional date property.",
+              "description_property": "Optional text property, editable from Home Assistant.",
+              "assignee_property": "Optional people property set to you on new items, so they show up in views filtered on you.",
+              "completed_days": "Done items edited longer ago than this are hidden. 0 hides them right away."
+            }
+          }
+        }
+      },
+      "page_settings": {
+        "title": "Page settings",
+        "description": "Settings for **{page}**.",
+        "data": {
+          "name": "Name",
+          "show_markdown": "Show content as markdown",
+          "properties": "Properties as entities",
+          "scan_interval": "Update interval"
+        },
+        "data_description": {
+          "show_markdown": "Adds a sensor with the page content in the markdown attribute.",
+          "properties": "Each selected property becomes a sensor (checkboxes become binary sensors).",
+          "scan_interval": "How often the page is checked for changes. Content is only downloaded when it changed."
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "Notion did not accept the token.",
+      "cannot_connect": "Could not reach Notion.",
+      "done_property_required": "Pick a done property, or turn off the todo list.",
+      "done_values_required": "Pick at least one value that means done."
+    },
+    "abort": {
+      "already_configured": "This Notion workspace is already set up.",
+      "cannot_connect": "Could not reach Notion.",
+      "wrong_account": "That token belongs to another Notion workspace.",
+      "reauth_successful": "Notion login updated.",
+      "missing_configuration": "OAuth is not configured. Add Notion application credentials first."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Notion Workspace options",
+        "data": {
+          "debug": "Debug mode (extra logging)"
+        },
+        "data_description": {
+          "debug": "Logs every Notion API call, sync differences and writes to the Home Assistant log."
+        }
+      }
+    }
+  },
+  "config_subentries": {
+    "database": {
+      "initiate_flow": {
+        "user": "Add database",
+        "reconfigure": "Reconfigure database"
+      },
+      "entry_type": "Database",
+      "step": {
+        "user": {
+          "title": "Add database",
+          "data": {
+            "data_source_id": "Database"
+          }
+        },
+        "settings": {
+          "title": "Database settings",
+          "description": "Settings for **{database}**.",
+          "data": {
+            "name": "Name",
+            "view_id": "Notion view",
+            "columns": "Extra columns",
+            "scan_interval": "Update interval"
+          },
+          "data_description": {
+            "view_id": "Use the filter and sort order of a view (for example \"My tasks\"). Leave empty for all rows.",
+            "columns": "Shown under each todo item and in the table sensor.",
+            "scan_interval": "How often Notion is polled."
+          },
+          "sections": {
+            "todo": {
+              "name": "Todo list",
+              "description": "Two-way sync: checking an item in Home Assistant updates Notion.",
+              "data": {
+                "todo_enabled": "Create a todo list",
+                "done_property": "Done property",
+                "done_values": "Values that mean done",
+                "open_value": "Value when un-checking",
+                "due_property": "Due date property",
+                "description_property": "Description property",
+                "assignee_property": "Assign new items to me",
+                "completed_days": "Show done items for (days)"
+              },
+              "data_description": {
+                "todo_enabled": "Needs a status or checkbox property.",
+                "done_property": "Status or checkbox property that marks an item as done.",
+                "done_values": "For a status property: options that count as done.",
+                "open_value": "For a status property: option set when an item is un-checked.",
+                "due_property": "Optional date property.",
+                "description_property": "Optional text property, editable from Home Assistant.",
+                "assignee_property": "Optional people property set to you on new items, so they show up in views filtered on you.",
+                "completed_days": "Done items edited longer ago than this are hidden. 0 hides them right away."
+              }
+            }
+          }
+        }
+      },
+      "error": {
+        "done_property_required": "Pick a done property, or turn off the todo list.",
+        "done_values_required": "Pick at least one value that means done."
+      },
+      "abort": {
+        "entry_not_loaded": "The Notion integration is not loaded. Fix the main entry first.",
+        "cannot_connect": "Could not reach Notion.",
+        "no_databases": "No more databases found. All visible databases are already added.",
+        "reconfigure_successful": "Settings saved."
+      }
+    },
+    "page": {
+      "initiate_flow": {
+        "user": "Add page",
+        "reconfigure": "Reconfigure page"
+      },
+      "entry_type": "Page",
+      "step": {
+        "user": {
+          "title": "Add page",
+          "description": "Showing {count} pages (search: {query}). Pick pages to show as markdown and sensors. Type a search term and submit to find more, including database rows.",
+          "data": {
+            "page": "Page",
+            "search": "Search"
+          },
+          "data_description": {
+            "search": "Submit with a search term to list matching pages, or leave empty to continue."
+          }
+        },
+        "settings": {
+          "title": "Page settings",
+          "description": "Settings for **{page}**.",
+          "data": {
+            "name": "Name",
+            "show_markdown": "Show content as markdown",
+            "properties": "Properties as entities",
+            "scan_interval": "Update interval"
+          },
+          "data_description": {
+            "show_markdown": "Adds a sensor with the page content in the markdown attribute.",
+            "properties": "Each selected property becomes a sensor (checkboxes become binary sensors).",
+            "scan_interval": "How often the page is checked for changes. Content is only downloaded when it changed."
+          }
+        }
+      },
+      "abort": {
+        "entry_not_loaded": "The Notion integration is not loaded. Fix the main entry first.",
+        "cannot_connect": "Could not reach Notion.",
+        "reconfigure_successful": "Settings saved."
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "table": {
+        "name": "Table"
+      },
+      "content": {
+        "name": "Content"
+      },
+      "created_time": {
+        "name": "Created"
+      },
+      "last_edited_time": {
+        "name": "Last edited"
+      },
+      "created_by": {
+        "name": "Created by"
+      },
+      "last_edited_by": {
+        "name": "Last edited by"
+      }
+    }
+  },
+  "exceptions": {
+    "not_loaded": {
+      "message": "The Notion list is not loaded yet."
+    },
+    "item_not_found": {
+      "message": "The item was not found in Notion. It may have been removed."
+    },
+    "write_failed": {
+      "message": "Notion rejected the change: {error}"
+    }
+  }
+}

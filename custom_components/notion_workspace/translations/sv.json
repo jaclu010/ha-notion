@@ -1,0 +1,289 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Anslut Notion",
+        "description": "Hur vill du logga in i Notion?",
+        "menu_options": {
+          "token": "Token (personal access token eller intern integration)",
+          "pick_implementation": "Logga in med Notion (OAuth)"
+        }
+      },
+      "token": {
+        "title": "Notion-token",
+        "description": "Skapa en personal access token på notion.so/developers/tokens. Den ger Home Assistant samma åtkomst som du har, så du kan välja vilka sidor och databaser som helst i nästa steg. En intern integration-token fungerar också, men då visas bara sidor som delats med den.",
+        "data": {
+          "api_token": "Token"
+        },
+        "data_description": {
+          "api_token": "Börjar med ntn_ eller secret_."
+        }
+      },
+      "reauth_confirm": {
+        "title": "Logga in i Notion igen",
+        "description": "Notion-token slutade fungera (personal access tokens går ut). Klistra in en ny token för samma workspace.",
+        "data": {
+          "api_token": "Token"
+        },
+        "data_description": {
+          "api_token": "Börjar med ntn_ eller secret_."
+        }
+      },
+      "reauth_oauth": {
+        "title": "Logga in i Notion igen",
+        "description": "Notion godkänner inte den sparade inloggningen längre. Logga in med Notion igen."
+      },
+      "pick_implementation": {
+        "title": "Välj inloggningsmetod",
+        "data": {
+          "implementation": "Application credentials"
+        }
+      },
+      "databases": {
+        "title": "Databaser",
+        "description": "Hittade {count} databaser. Välj de som ska visas i Home Assistant. Varje databas blir en todo-lista och/eller en tabell-sensor. Du kan lägga till fler senare.",
+        "data": {
+          "databases": "Databaser"
+        },
+        "data_description": {
+          "databases": "Lämna tomt för att hoppa över."
+        }
+      },
+      "pages": {
+        "title": "Sidor",
+        "description": "Visar {count} sidor (sökning: {query}). Välj sidor som ska visas som markdown och sensorer. Skriv ett sökord och skicka för att hitta fler, även databasrader.",
+        "data": {
+          "pages": "Sidor",
+          "search": "Sök"
+        },
+        "data_description": {
+          "pages": "Valda sidor behålls när du söker.",
+          "search": "Skicka med ett sökord för att lista träffar, eller lämna tomt för att fortsätta."
+        }
+      },
+      "database_settings": {
+        "title": "Databasinställningar",
+        "description": "Inställningar för **{database}**.",
+        "data": {
+          "name": "Namn",
+          "view_id": "Notion-vy",
+          "columns": "Extra kolumner",
+          "scan_interval": "Uppdateringsintervall"
+        },
+        "data_description": {
+          "view_id": "Använd filter och sortering från en vy (t.ex. \"My tasks\"). Lämna tomt för alla rader.",
+          "columns": "Visas under varje uppgift och i tabell-sensorn.",
+          "scan_interval": "Hur ofta Notion hämtas."
+        },
+        "sections": {
+          "todo": {
+            "name": "Todo-lista",
+            "description": "Tvåvägssync: bockar du av i Home Assistant uppdateras Notion.",
+            "data": {
+              "todo_enabled": "Skapa en todo-lista",
+              "done_property": "Klar-property",
+              "done_values": "Värden som betyder klar",
+              "open_value": "Värde när man bockar ur",
+              "due_property": "Förfallodatum-property",
+              "description_property": "Beskrivnings-property",
+              "assignee_property": "Tilldela mig nya uppgifter",
+              "completed_days": "Visa klara uppgifter i (dagar)"
+            },
+            "data_description": {
+              "todo_enabled": "Kräver en status- eller checkbox-property.",
+              "done_property": "Status- eller checkbox-property som markerar en uppgift som klar.",
+              "done_values": "För status: alternativ som räknas som klara.",
+              "open_value": "För status: alternativ som sätts när en uppgift bockas ur.",
+              "due_property": "Valfri datum-property.",
+              "description_property": "Valfri text-property som kan redigeras från Home Assistant.",
+              "assignee_property": "Valfri people-property som sätts till dig på nya uppgifter, så att de syns i vyer som filtrerar på dig.",
+              "completed_days": "Klara uppgifter som ändrades för längre sedan döljs. 0 döljer dem direkt."
+            }
+          }
+        }
+      },
+      "page_settings": {
+        "title": "Sidinställningar",
+        "description": "Inställningar för **{page}**.",
+        "data": {
+          "name": "Namn",
+          "show_markdown": "Visa innehåll som markdown",
+          "properties": "Properties som entiteter",
+          "scan_interval": "Uppdateringsintervall"
+        },
+        "data_description": {
+          "show_markdown": "Lägger till en sensor med sidans innehåll i attributet markdown.",
+          "properties": "Varje vald property blir en sensor (checkboxar blir binära sensorer).",
+          "scan_interval": "Hur ofta sidan kontrolleras. Innehållet laddas bara ner när det har ändrats."
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "Notion godkände inte token.",
+      "cannot_connect": "Kunde inte nå Notion.",
+      "done_property_required": "Välj en klar-property eller stäng av todo-listan.",
+      "done_values_required": "Välj minst ett värde som betyder klar."
+    },
+    "abort": {
+      "already_configured": "Den här Notion-workspacen är redan tillagd.",
+      "cannot_connect": "Kunde inte nå Notion.",
+      "wrong_account": "Token hör till en annan Notion-workspace.",
+      "reauth_successful": "Notion-inloggningen är uppdaterad.",
+      "missing_configuration": "OAuth är inte konfigurerat. Lägg först till application credentials för Notion."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Notion Workspace-inställningar",
+        "data": {
+          "debug": "Debugläge (extra loggning)"
+        },
+        "data_description": {
+          "debug": "Loggar varje anrop mot Notion, skillnader vid synk och skrivningar till Home Assistants logg."
+        }
+      }
+    }
+  },
+  "config_subentries": {
+    "database": {
+      "initiate_flow": {
+        "user": "Lägg till databas",
+        "reconfigure": "Ändra databas"
+      },
+      "entry_type": "Databas",
+      "step": {
+        "user": {
+          "title": "Lägg till databas",
+          "data": {
+            "data_source_id": "Databas"
+          }
+        },
+        "settings": {
+          "title": "Databasinställningar",
+          "description": "Inställningar för **{database}**.",
+          "data": {
+            "name": "Namn",
+            "view_id": "Notion-vy",
+            "columns": "Extra kolumner",
+            "scan_interval": "Uppdateringsintervall"
+          },
+          "data_description": {
+            "view_id": "Använd filter och sortering från en vy (t.ex. \"My tasks\"). Lämna tomt för alla rader.",
+            "columns": "Visas under varje uppgift och i tabell-sensorn.",
+            "scan_interval": "Hur ofta Notion hämtas."
+          },
+          "sections": {
+            "todo": {
+              "name": "Todo-lista",
+              "description": "Tvåvägssync: bockar du av i Home Assistant uppdateras Notion.",
+              "data": {
+                "todo_enabled": "Skapa en todo-lista",
+                "done_property": "Klar-property",
+                "done_values": "Värden som betyder klar",
+                "open_value": "Värde när man bockar ur",
+                "due_property": "Förfallodatum-property",
+                "description_property": "Beskrivnings-property",
+                "assignee_property": "Tilldela mig nya uppgifter",
+                "completed_days": "Visa klara uppgifter i (dagar)"
+              },
+              "data_description": {
+                "todo_enabled": "Kräver en status- eller checkbox-property.",
+                "done_property": "Status- eller checkbox-property som markerar en uppgift som klar.",
+                "done_values": "För status: alternativ som räknas som klara.",
+                "open_value": "För status: alternativ som sätts när en uppgift bockas ur.",
+                "due_property": "Valfri datum-property.",
+                "description_property": "Valfri text-property som kan redigeras från Home Assistant.",
+                "assignee_property": "Valfri people-property som sätts till dig på nya uppgifter, så att de syns i vyer som filtrerar på dig.",
+                "completed_days": "Klara uppgifter som ändrades för längre sedan döljs. 0 döljer dem direkt."
+              }
+            }
+          }
+        }
+      },
+      "error": {
+        "done_property_required": "Välj en klar-property eller stäng av todo-listan.",
+        "done_values_required": "Välj minst ett värde som betyder klar."
+      },
+      "abort": {
+        "entry_not_loaded": "Notion-integrationen är inte laddad. Åtgärda huvudposten först.",
+        "cannot_connect": "Kunde inte nå Notion.",
+        "no_databases": "Inga fler databaser hittades. Alla synliga databaser är redan tillagda.",
+        "reconfigure_successful": "Inställningarna är sparade."
+      }
+    },
+    "page": {
+      "initiate_flow": {
+        "user": "Lägg till sida",
+        "reconfigure": "Ändra sida"
+      },
+      "entry_type": "Sida",
+      "step": {
+        "user": {
+          "title": "Lägg till sida",
+          "description": "Visar {count} sidor (sökning: {query}). Välj sidor som ska visas som markdown och sensorer. Skriv ett sökord och skicka för att hitta fler, även databasrader.",
+          "data": {
+            "page": "Sida",
+            "search": "Sök"
+          },
+          "data_description": {
+            "search": "Skicka med ett sökord för att lista träffar, eller lämna tomt för att fortsätta."
+          }
+        },
+        "settings": {
+          "title": "Sidinställningar",
+          "description": "Inställningar för **{page}**.",
+          "data": {
+            "name": "Namn",
+            "show_markdown": "Visa innehåll som markdown",
+            "properties": "Properties som entiteter",
+            "scan_interval": "Uppdateringsintervall"
+          },
+          "data_description": {
+            "show_markdown": "Lägger till en sensor med sidans innehåll i attributet markdown.",
+            "properties": "Varje vald property blir en sensor (checkboxar blir binära sensorer).",
+            "scan_interval": "Hur ofta sidan kontrolleras. Innehållet laddas bara ner när det har ändrats."
+          }
+        }
+      },
+      "abort": {
+        "entry_not_loaded": "Notion-integrationen är inte laddad. Åtgärda huvudposten först.",
+        "cannot_connect": "Kunde inte nå Notion.",
+        "reconfigure_successful": "Inställningarna är sparade."
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "table": {
+        "name": "Tabell"
+      },
+      "content": {
+        "name": "Innehåll"
+      },
+      "created_time": {
+        "name": "Skapad"
+      },
+      "last_edited_time": {
+        "name": "Senast ändrad"
+      },
+      "created_by": {
+        "name": "Skapad av"
+      },
+      "last_edited_by": {
+        "name": "Ändrad av"
+      }
+    }
+  },
+  "exceptions": {
+    "not_loaded": {
+      "message": "Notion-listan är inte laddad än."
+    },
+    "item_not_found": {
+      "message": "Uppgiften hittades inte i Notion. Den kan ha tagits bort."
+    },
+    "write_failed": {
+      "message": "Notion avvisade ändringen: {error}"
+    }
+  }
+}
