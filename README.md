@@ -8,13 +8,23 @@ Show Notion in Home Assistant:
 
 > Debug mode is **on by default** in this early version and logs every Notion API call, sync differences and writes. Turn it off under *Settings → Devices & services → Notion Workspace → Configure*.
 
-## Installation (HACS)
+## Installation
+
+Requires Home Assistant 2026.9 or newer.
+
+### Marketplace (Home Assistant 2026.11 or newer)
+
+1. *Settings → Marketplace →* **Add from link**, enter `jaclu010/ha-notion` and select **Add**. The first time, Home Assistant asks you to connect GitHub.
+2. Install **Notion Workspace**. A first install loads without a restart.
+3. *Settings → Devices & services → Add integration → Notion Workspace*.
+
+Installed earlier through HACS? The Marketplace takes the install over when you upgrade to 2026.11, so there is nothing to do.
+
+### HACS (Home Assistant 2026.9 and 2026.10)
 
 1. HACS → ⋮ → *Custom repositories* → add `https://github.com/jaclu010/ha-notion` as type *Integration*.
 2. Install **Notion Workspace** and restart Home Assistant.
 3. *Settings → Devices & services → Add integration → Notion Workspace*.
-
-Requires Home Assistant 2026.9 or newer.
 
 ## Signing in
 
